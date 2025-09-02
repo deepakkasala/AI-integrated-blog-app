@@ -13,18 +13,14 @@ export const AppProvider = ({ children }) => {
   const fetchBlogs = async () => {
     try {
       const { data } = await axios.get(`${BASE_URL}/blogs/all`);
-      // console.log("DATA:", data);
       data.success ? setBlogs(data.blogs) : toast.error(data.message);
-      // console.log(data.success, data.message);
     } catch (error) {
-      console.log(error);
       toast.error(error.message);
     }
   };
   useEffect(() => {
     fetchBlogs();
     const token = localStorage.getItem("token");
-    console.log("Token", token);
     if (token) {
       setToken(token);
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;

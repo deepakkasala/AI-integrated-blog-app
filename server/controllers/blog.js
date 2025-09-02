@@ -60,12 +60,9 @@ const editBlog = async (req, res) => {
   try {
     const { id, title, subTitle, description, category, isPublished } =
       JSON.parse(req.body.blog);
-    console.log("Edit APi Hit!");
-    console.log(id, title, subTitle, description, category, isPublished);
 
     const imageFile = req.file;
     if (!title || !description || !category || !imageFile) {
-      console.log("CHECKING: ", title, description, category, imageFile);
       return res
         .status(404)
         .json({ message: "Required Fields are missing!", success: false });
@@ -98,7 +95,6 @@ const editBlog = async (req, res) => {
       image,
       isPublished,
     };
-    console.log(blogData);
 
     const updatedBlog = await Blog.findByIdAndUpdate(id, blogData);
     updatedBlog.save();
@@ -255,42 +251,3 @@ module.exports = {
   getBlogComments,
   generateContent,
 };
-
-// const form = new FormData();
-// form.append("file", fileBuffer.toString("base64"));
-// form.append("fileName", imageFile.originalname);
-// form.append("folder", "/blogs");
-// const httpsAgent = new https.Agent({ rejectUnauthorized: false });
-//Upload Image to Image kit
-// const response = await imagekit.upload({
-// file: fileBuffer,
-// fileName: imageFile.originalname,
-// folder: "/blogs",
-// });
-// const response = await axios.post(
-// "https://upload.imagekit.io/api/v1/files/upload",
-// form,
-// {
-// headers: {
-// ...form.getHeaders(),
-// Authorization:
-// "Basic " +
-// Buffer.from(
-// `${process.env.IMAGE_KIT_PUBLIC_KEY}:${process.env.IMAGE_KIT_PRIVATE_KEY}`
-// ).toString("base64"),
-// },
-// httpsAgent, // Here we bypass the cert validation for this call only
-// }
-// );
-// const uploadedFile = response.data;
-//Optimization through Image kit URL Transformation.
-// const optimizedImageUrl = imagekit.url({
-// path: response.filePath,
-// transformation: [
-// { quality: "auto" }, //Auto Compression
-// { format: "webp" }, //convert to modern format.
-// { width: "1280" }, //width resizing.
-// ],
-// });
-// // 4. Build optimized image URL
-// const optimizedImageUrl = `${process.env.IMAGE_KIT_ENDPOINT}/${uploadedFile.filePath}?tr=fo-auto,fl-webp,w-1280`;

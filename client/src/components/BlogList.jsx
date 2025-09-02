@@ -19,40 +19,8 @@ const BlogList = () => {
         )
     );
   };
-  console.log();
 
   return (
-    // <div>
-    //   <div className="flex justify-center gap-4 sm:gap-8 my-10 relative">
-    //     {blogCategories.map((item) => (
-    //       <div key={item} className="relative">
-    //         <button
-    //           onClick={() => setMenu(item)}
-    //           className={`cursor-pointer text-gray-500 ${
-    //             menu == item && "text-white px-4 pt-0.5"
-    //           }`}
-    //         >
-    //           {item}
-    //           {item == menu && (
-    //             <motion.div
-    //               layoutId="underline"
-    //               transition={{ type: "spring", stiffness: 500, damping: 30 }}
-    //               className="bg-primary rounded-full absolute left-0 right-0 top-0 h-7 -z-1"
-    //             ></motion.div>
-    //           )}
-    //         </button>
-    //       </div>
-    //     ))}
-    //   </div>
-    //   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8 mb-24 mx-8 sm:mx-16 xl:mx-40">
-    //     {/* {CARDS} */}
-    //     {filteredBlogs()
-    //       .filter((blog) => (menu === "All" ? true : blog.category === menu))
-    //       .map((blog) => (
-    //         <BlogCard key={blog._id} blog={blog} />
-    //       ))}
-    //   </div>
-    // </div>
     <div className="min-h-screen dark:bg-gray-900 transition-colors duration-300">
       {/* Blog Categories */}
       <div className="flex justify-center gap-4 sm:gap-8 my-10 relative">

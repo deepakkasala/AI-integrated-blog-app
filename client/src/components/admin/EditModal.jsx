@@ -20,10 +20,6 @@ const EditModal = ({ blog, Title, setEditModal }) => {
   const editorRef = useRef(null);
   const quillRef = useRef(null);
   const navigate = useNavigate();
-  console.log(editorRef);
-  console.log(quillRef);
-
-  console.log(blog);
 
   const generateContent = async () => {
     if (!title) return toast.error("Please enter a title for blog!");
@@ -46,8 +42,6 @@ const EditModal = ({ blog, Title, setEditModal }) => {
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     setIsAdding(true);
-    console.log("Form submitted");
-
     try {
       const editedBlog = {
         id: blog._id,
@@ -57,7 +51,6 @@ const EditModal = ({ blog, Title, setEditModal }) => {
         category,
         isPublished,
       };
-      console.log(editedBlog);
 
       const formData = new FormData();
       formData.append("blog", JSON.stringify(editedBlog));
@@ -65,13 +58,10 @@ const EditModal = ({ blog, Title, setEditModal }) => {
         formData.append("image", image);
       } else {
       }
-      console.log(formData);
-
       const { data } = await axios.post(
         "http://localhost:3020/blogs/editBlog",
         formData
       );
-      console.log(data);
 
       if (data.success) {
         toast.success(data.message);
@@ -81,13 +71,9 @@ const EditModal = ({ blog, Title, setEditModal }) => {
         setCategory("Startup");
         navigate("/");
       } else {
-        console.log(data);
-
         toast.error(data.message);
       }
     } catch (error) {
-      console.log(error);
-
       toast.error(error.message);
     } finally {
       setIsAdding(false);

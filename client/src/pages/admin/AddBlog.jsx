@@ -19,8 +19,6 @@ const AddBlog = () => {
   const [category, setCategory] = useState("Startup");
   const [isPublished, setIsPublished] = useState(false);
   const navigate = useNavigate();
-  console.log(quillRef);
-  console.log(editorRef);
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
