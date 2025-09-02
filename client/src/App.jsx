@@ -14,7 +14,7 @@ import { useAppContext } from "./context/AppContext";
 import { BASE_URL } from "./utils/constants";
 const App = () => {
   const { token } = useAppContext();
-  console.log(BASE_URL);
+  // console.log(BASE_URL);
   return (
     <div>
       <Toaster />
