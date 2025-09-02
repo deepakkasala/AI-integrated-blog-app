@@ -19,36 +19,82 @@ const BlogList = () => {
         )
     );
   };
+  console.log();
+
   return (
-    <div>
+    // <div>
+    //   <div className="flex justify-center gap-4 sm:gap-8 my-10 relative">
+    //     {blogCategories.map((item) => (
+    //       <div key={item} className="relative">
+    //         <button
+    //           onClick={() => setMenu(item)}
+    //           className={`cursor-pointer text-gray-500 ${
+    //             menu == item && "text-white px-4 pt-0.5"
+    //           }`}
+    //         >
+    //           {item}
+    //           {item == menu && (
+    //             <motion.div
+    //               layoutId="underline"
+    //               transition={{ type: "spring", stiffness: 500, damping: 30 }}
+    //               className="bg-primary rounded-full absolute left-0 right-0 top-0 h-7 -z-1"
+    //             ></motion.div>
+    //           )}
+    //         </button>
+    //       </div>
+    //     ))}
+    //   </div>
+    //   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8 mb-24 mx-8 sm:mx-16 xl:mx-40">
+    //     {/* {CARDS} */}
+    //     {filteredBlogs()
+    //       .filter((blog) => (menu === "All" ? true : blog.category === menu))
+    //       .map((blog) => (
+    //         <BlogCard key={blog._id} blog={blog} />
+    //       ))}
+    //   </div>
+    // </div>
+    <div className="min-h-screen dark:bg-gray-900 transition-colors duration-300">
+      {/* Blog Categories */}
       <div className="flex justify-center gap-4 sm:gap-8 my-10 relative">
         {blogCategories.map((item) => (
           <div key={item} className="relative">
             <button
               onClick={() => setMenu(item)}
-              className={`cursor-pointer text-gray-500 ${
-                menu == item && "text-white px-4 pt-0.5"
-              }`}
+              className={`cursor-pointer relative px-4 py-2 rounded-lg font-medium transition-colors duration-300
+            ${
+              menu === item
+                ? "text-white dark:text-gray-900 bg-primary shadow-md"
+                : "text-gray-600 dark:text-gray-300 hover:text-primary"
+            }`}
             >
               {item}
-              {item == menu && (
+              {item === menu && (
                 <motion.div
                   layoutId="underline"
                   transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                  className="bg-primary rounded-full absolute left-0 right-0 top-0 h-7 -z-1"
+                  className="bg-primary rounded-full absolute left-0 right-0 top-0 h-7 -z-10"
                 ></motion.div>
               )}
             </button>
           </div>
         ))}
       </div>
+
+      {/* Blog Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8 mb-24 mx-8 sm:mx-16 xl:mx-40">
-        {/* {CARDS} */}
-        {filteredBlogs()
-          .filter((blog) => (menu === "All" ? true : blog.category === menu))
-          .map((blog) => (
-            <BlogCard key={blog._id} blog={blog} />
-          ))}
+        {!filteredBlogs().filter((elem) =>
+          menu === "All" ? true : elem.category === menu
+        ).length ? (
+          <div className="flex items-center justify-center w-full h-64 col-span-full text-2xl font-semibold text-gray-500 dark:text-gray-400">
+            <p>
+              No Blogs on <span className="text-primary ml-2">{`${menu}`}</span>
+            </p>
+          </div>
+        ) : (
+          filteredBlogs()
+            .filter((blog) => (menu === "All" ? true : blog.category === menu))
+            .map((blog) => <BlogCard key={blog._id} blog={blog} />)
+        )}
       </div>
     </div>
   );

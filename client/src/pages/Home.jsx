@@ -6,7 +6,7 @@ import NewsLetter from "../components/NewsLetter";
 import Footer from "../components/Footer";
 const Home = () => {
   return (
-    <div>
+    <div className="dark:bg-gray-900">
       <Navbar />
       <Header />
       <BlogList />

@@ -9,9 +9,11 @@ const {
   deleteBlogById,
   togglePublish,
   generateContent,
+  editBlog,
 } = require("../controllers/blog");
 const router = express.Router();
 router.post("/addBlog", upload.single("image"), auth, addBlog);
+router.post("/editBlog", upload.single("image"), auth, editBlog);
 router.get("/all", getAllBlogs);
 router.get("/:blogId", getBlogById);
 router.delete("/delete/:id", auth, deleteBlogById);

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { BASE_URL } from "../utils/constants";
 const AppContext = createContext();
+
 export const AppProvider = ({ children }) => {
   const navigate = useNavigate();
   const [token, setToken] = useState(null);

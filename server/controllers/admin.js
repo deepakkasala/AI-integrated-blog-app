@@ -95,7 +95,7 @@ const deleteCommentById = async (req, res) => {
     await Comment.findByIdAndDelete(id);
     res
       .status(200)
-      .json({ message: "Comment deleted successfully!", success: true });
+      .json({ message: "Comment deleted!", success: true });
   } catch (error) {
     res.status(500).json({
       message: "Error in deleting comment by admin!",
@@ -111,7 +111,7 @@ const approveCommentById = async (req, res) => {
     await Comment.findByIdAndUpdate(id, { isApproved: true });
     res
       .status(200)
-      .json({ message: "Comment approved successfully!", success: true });
+      .json({ message: "Comment approved!", success: true });
   } catch (error) {
     res.status(500).json({
       message: "Error in approving comment by admin.",

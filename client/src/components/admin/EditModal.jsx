@@ -1,66 +1,30 @@
 import React, { useEffect, useRef, useState } from "react";
-import { assets, blogCategories } from "../../assets/assets";
+import { FiUploadCloud } from "react-icons/fi";
+import { blogCategories } from "../../assets/assets";
 import Quill from "quill";
+import { parse } from "marked";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import axios from "axios";
 import { BASE_URL } from "../../utils/constants";
-import toast from "react-hot-toast";
-import { parse } from "marked";
-import { FiUploadCloud } from "react-icons/fi";
-import { useNavigate } from "react-router-dom";
 
-const AddBlog = () => {
+const EditModal = ({ blog, Title, setEditModal }) => {
   const [isAdding, setIsAdding] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [title, setTitle] = useState(blog.title);
+  const [subTitle, setSubTitle] = useState(blog.subTitle);
+  const [category, setCategory] = useState(blog.category);
+  const [isPublished, setIsPublished] = useState(blog.isPublished);
+  const [description, setDescription] = useState(blog.description);
+  const [image, setImage] = useState(blog.image);
   const editorRef = useRef(null);
   const quillRef = useRef(null);
-  const [image, setImage] = useState(false);
-  const [title, setTitle] = useState("");
-  const [subTitle, setSubTitle] = useState("");
-  const [category, setCategory] = useState("Startup");
-  const [isPublished, setIsPublished] = useState(false);
   const navigate = useNavigate();
-  console.log(quillRef);
   console.log(editorRef);
+  console.log(quillRef);
 
-  const onSubmitHandler = async (e) => {
-    e.preventDefault();
-    setIsAdding(true);
-    try {
-      const blog = {
-        title,
-        subTitle,
-        description: quillRef.current.root.innerHTML,
-        category,
-        isPublished,
-      };
-      const formData = new FormData();
-      formData.append("blog", JSON.stringify(blog));
-      if (image) {
-        formData.append("image", image);
-      } else {
-      }
-      const { data } = await axios.post(`${BASE_URL}/blogs/addBlog`, formData);
+  console.log(blog);
 
-      if (data.success) {
-        toast.success(data.message);
-        setImage(false);
-        setTitle("");
-        quillRef.current.root.innerHTML = "";
-        setCategory("Startup");
-        if (blog.isPublished) {
-          navigate("/");
-        } else {
-          navigate("/admin");
-        }
-      } else {
-        toast.error(data.message);
-      }
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      setIsAdding(false);
-    }
-  };
   const generateContent = async () => {
     if (!title) return toast.error("Please enter a title for blog!");
     try {
@@ -79,25 +43,75 @@ const AddBlog = () => {
       setLoading(false);
     }
   };
+  const onSubmitHandler = async (e) => {
+    e.preventDefault();
+    setIsAdding(true);
+    console.log("Form submitted");
+
+    try {
+      const editedBlog = {
+        id: blog._id,
+        title,
+        subTitle,
+        description: quillRef.current.root.innerHTML,
+        category,
+        isPublished,
+      };
+      console.log(editedBlog);
+
+      const formData = new FormData();
+      formData.append("blog", JSON.stringify(editedBlog));
+      if (image) {
+        formData.append("image", image);
+      } else {
+      }
+      console.log(formData);
+
+      const { data } = await axios.post(
+        "http://localhost:3020/blogs/editBlog",
+        formData
+      );
+      console.log(data);
+
+      if (data.success) {
+        toast.success(data.message);
+        setImage(false);
+        setTitle("");
+        quillRef.current.root.innerHTML = "";
+        setCategory("Startup");
+        navigate("/");
+      } else {
+        console.log(data);
+
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+
+      toast.error(error.message);
+    } finally {
+      setIsAdding(false);
+    }
+  };
+
   useEffect(() => {
     if (!quillRef.current && editorRef.current) {
       quillRef.current = new Quill(editorRef.current, { theme: "snow" });
     }
+    quillRef.current.root.innerHTML = parse(blog.description);
   }, []);
   return (
-    <form
-      onSubmit={onSubmitHandler}
-      className="flex-1 bg-blue-50/50 dark:bg-gray-900 text-gray-600 dark:text-gray-300 h-full overflow-scroll"
-    >
-      <div className="bg-white dark:bg-gray-800 w-full max-w-3xl p-4 md:p-10 sm:m-10 rounded shadow">
-        <p className="text-gray-700 dark:text-gray-200 mb-2">
-          Upload Thumbnail
-        </p>
+    <form onSubmit={onSubmitHandler} className="">
+      <div className="bg-white dark:bg-gray-800 w-full max-w-3xl p-4 md:p-10 sm:m-10 rounded shadow border border-gray-500">
+        <h1 className="text-2xl font-bold text-center text-primary">{Title}</h1>
+        <p className="text-gray-700 dark:text-gray-200 mb-2">Edit Thumbnail</p>
         <label htmlFor="image">
           <div className=" flex flex-col items-center border border-gray-300 w-full sm:w-1/2 lg:w-1/3 overflow-hidden rounded-md cursor-pointer dark:border-gray-600">
             {image ? (
               <img
-                src={URL.createObjectURL(image)}
+                src={
+                  typeof image === "string" ? image : URL.createObjectURL(image)
+                }
                 className={`w-full h-28 transition-all duration-300 ${
                   image ? "rounded-none" : "p-4"
                 }`}
@@ -122,7 +136,7 @@ const AddBlog = () => {
             hidden
           />
         </label>
-        <p className="mt-4 text-gray-700 dark:text-gray-200">Blog Title</p>
+        <p className="mt-4 text-gray-700 dark:text-gray-200">Edit Blog Title</p>
         <input
           type="text"
           placeholder="Type here"
@@ -131,7 +145,7 @@ const AddBlog = () => {
           onChange={(e) => setTitle(e.target.value)}
           value={title}
         />
-        <p className="mt-4 text-gray-700 dark:text-gray-200">Sub title</p>
+        <p className="mt-4 text-gray-700 dark:text-gray-200">Edit Sub title</p>
         <input
           type="text"
           placeholder="Type here"
@@ -141,7 +155,7 @@ const AddBlog = () => {
           value={subTitle}
         />
         <p className="mt-4 text-gray-700 dark:text-gray-200">
-          Blog Description
+          Edit Blog Description
         </p>
         <div className="max-w-lg h-74 pb-16 sm:pb-10 pt-2 relative">
           <div
@@ -158,12 +172,14 @@ const AddBlog = () => {
             disabled={loading}
             type="button"
             onClick={generateContent}
-            className="absolute bottom-1 right-2 ml-2 text-xs text-white bg-black/70 px-4 py-1.5 rounded hover:underline cursor-pointer"
+            className="disabled absolute bottom-1 right-2 ml-2 text-xs text-white bg-black/70 px-4 py-1.5 rounded hover:underline cursor-pointer"
           >
             Generate with AI
           </button>
         </div>
-        <p className="mt-4 text-gray-700 dark:text-gray-200">Blog Category</p>
+        <p className="mt-4 text-gray-700 dark:text-gray-200">
+          Edit Blog Category
+        </p>
         <select
           name="category"
           onChange={(e) => setCategory(e.target.value)}
@@ -184,15 +200,24 @@ const AddBlog = () => {
             onChange={(e) => setIsPublished(e.target.checked)}
           />
         </div>
-        <button
-          type="submit"
-          disabled={isAdding}
-          className="mt-8 w-40 h-10 bg-primary text-white rounded cursor-pointer text-sm"
-        >
-          {isAdding ? "Adding..." : "Add Blog"}
-        </button>
+        <div className="flex gap-3 items-center mt-10">
+          <button
+            type="submit"
+            disabled={isAdding}
+            className="w-40 h-10 bg-primary text-white rounded cursor-pointer text-sm"
+          >
+            {isAdding ? "Updating..." : "Update Blog"}
+          </button>
+          <button
+            className="w-40 h-10 bg-primary text-white rounded"
+            onClick={() => setEditModal(false)}
+          >
+            Close
+          </button>
+        </div>
       </div>
     </form>
   );
 };
-export default AddBlog;
+
+export default EditModal;

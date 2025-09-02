@@ -1,13 +1,10 @@
-// const https = require("https");
-// const FormData = require("form-data");
-// const axios = require("axios");
 const imagekit = require("../configs/imageKit");
 const fs = require("fs");
 const path = require("path");
 const Blog = require("../models/Blog");
 const Comment = require("../models/Comment");
-const upload = require("../configs/multerConfig");
 const main = require("../configs/gemini");
+
 const addBlog = async (req, res) => {
   try {
     const { title, subTitle, description, category, isPublished } = JSON.parse(
@@ -58,6 +55,66 @@ const addBlog = async (req, res) => {
     });
   }
 };
+
+const editBlog = async (req, res) => {
+  try {
+    const { id, title, subTitle, description, category, isPublished } =
+      JSON.parse(req.body.blog);
+    console.log("Edit APi Hit!");
+    console.log(id, title, subTitle, description, category, isPublished);
+
+    const imageFile = req.file;
+    if (!title || !description || !category || !imageFile) {
+      console.log("CHECKING: ", title, description, category, imageFile);
+      return res
+        .status(404)
+        .json({ message: "Required Fields are missing!", success: false });
+    }
+    const fileBuffer = fs.readFileSync(imageFile.path);
+    //Upload Image to Image kit
+    const response = await imagekit.upload({
+      file: fileBuffer,
+      fileName: imageFile.originalname,
+      folder: "/blogs",
+    });
+
+    //Optimization through Image kit URL Transformation.
+    const optimizedImageUrl = imagekit.url({
+      path: response.filePath,
+      transformation: [
+        { quality: "auto" }, //Auto Compression
+        { format: "webp" }, //convert to modern format.
+        { width: "1280" }, //width resizing.
+      ],
+    });
+
+    const image = optimizedImageUrl;
+    // const image = `/uploads/${imageFile.filename}`;
+    const blogData = {
+      title,
+      subTitle,
+      description,
+      category,
+      image,
+      isPublished,
+    };
+    console.log(blogData);
+
+    const updatedBlog = await Blog.findByIdAndUpdate(id, blogData);
+    updatedBlog.save();
+    res.status(201).json({
+      message: "Blog updated successfully",
+      success: true,
+      updatedBlog,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Internal server Error." + error.message,
+      error,
+      success: false,
+    });
+  }
+};
 const getAllBlogs = async (req, res) => {
   try {
     const blogs = await Blog.find({ isPublished: true });
@@ -95,17 +152,10 @@ const deleteBlogById = async (req, res) => {
     }
     const imagePath = path.join(__dirname, "../public", blog.image);
     await Blog.findByIdAndDelete(id);
-    //delete the blog image of this blog in the uploads folder.
-    // fs.unlink(imagePath, (err) => {
-    //   if (err) {
-    //     console.log("Failed to delete image in uploads folder", err);
-    //   } else {
-    //     console.log("Deleted Image", imagePath);
-    //   }
-    // });
     res
       .status(200)
       .json({ message: "Blog deleted successfully!", success: true });
+
     //Delete all the comments associated with this blog.
     await Comment.deleteMany({ blog: id });
   } catch (error) {
@@ -123,13 +173,13 @@ const togglePublish = async (req, res) => {
     blog.isPublished = !blog.isPublished;
     await blog.save();
     res.status(200).json({
-      message: "isPublished status updated successfully!",
+      message: `Blog ${blog.isPublished ? "Published" : "Unpublished"}`,
       success: true,
       blog,
     });
   } catch (error) {
     res.status(500).json({
-      message: "Error in toggling the published status!",
+      message: "Internal Error in toggling the published status!",
       success: false,
       error,
     });
@@ -196,6 +246,7 @@ const generateContent = async (req, res) => {
 };
 module.exports = {
   addBlog,
+  editBlog,
   getAllBlogs,
   getBlogById,
   deleteBlogById,

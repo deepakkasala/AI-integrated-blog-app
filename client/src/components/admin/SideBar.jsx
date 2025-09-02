@@ -13,7 +13,10 @@ const SideBar = () => {
           }`
         }
       >
-        <img src={assets.home_icon} className="min-w-4 w-5" />
+        <img
+          src={"https://img.icons8.com/nolan/512/control-panel.png"}
+          className="min-w-8 w-5"
+        />
         <p className="hidden md:inline-block">Dashboard</p>
       </NavLink>
       <NavLink
@@ -24,7 +27,10 @@ const SideBar = () => {
           }`
         }
       >
-        <img src={assets.add_icon} className="min-w-4 w-5" />
+        <img
+          src={"https://img.icons8.com/nolan/512/add-file.png"}
+          className="min-w-8 w-5"
+        />
         <p className="hidden md:inline-block">Add Blogs</p>
       </NavLink>
       <NavLink
@@ -35,7 +41,10 @@ const SideBar = () => {
           }`
         }
       >
-        <img src={assets.list_icon} className="min-w-4 w-5" />
+        <img
+          src={"https://img.icons8.com/nolan/512/folder-invoices.png"}
+          className="min-w-8 w-5"
+        />
         <p className="hidden md:inline-block">Blog Lists</p>
       </NavLink>
       <NavLink
@@ -46,7 +55,10 @@ const SideBar = () => {
           }`
         }
       >
-        <img src={assets.comment_icon} className="min-w-4 w-5" />
+        <img
+          src={"https://img.icons8.com/nolan/512/speech-bubble-with-dots.png"}
+          className="min-w-8 w-5"
+        />
         <p className="hidden md:inline-block">Comments</p>
       </NavLink>
     </div>

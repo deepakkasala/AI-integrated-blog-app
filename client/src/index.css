@@ -1,5 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
 * {
   font-family: "Outfit", sans-serif;
 }
@@ -69,4 +71,225 @@
 }
 .rich-text a {
   color: #007aff;
+}
+
+/* dark mode configuration */
+
+/* =====================
+   Dark Mode Rich Text
+   ===================== */
+.dark .rich-text h1,
+.dark .rich-text h2,
+.dark .rich-text h3,
+.dark .rich-text h4,
+.dark .rich-text h5,
+.dark .rich-text h6 {
+  color: #f5f5f5; /* light text for dark bg */
+}
+
+.dark .rich-text p {
+  color: #e5e5e5;
+}
+
+.dark .rich-text a {
+  color: #60a5fa; /* tailwind blue-400 */
+}
+.dark .rich-text a:hover {
+  color: #93c5fd; /* tailwind blue-300 */
+}
+
+.dark .rich-text ul,
+.dark .rich-text ol {
+  color: #e5e5e5;
+}
+
+.dark .rich-text blockquote {
+  border-left-color: #60a5fa; /* blue-400 */
+  color: #d1d5db; /* gray-300 */
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.dark .rich-text code {
+  background: #1f2937; /* gray-800 */
+  color: #f9fafb; /* gray-50 */
+}
+
+/* ---- Rich Text: Dark Theme Overrides ---- */
+.dark .rich-text {
+  color: #e5e7eb !important;
+} /* base text */
+
+.dark .rich-text p {
+  color: #d1d5db !important;
+} /* gray-300 */
+.dark .rich-text h1 {
+  color: #f3f4f6 !important;
+} /* gray-100 */
+.dark .rich-text h2 {
+  color: #e5e7eb !important;
+} /* gray-200 */
+.dark .rich-text h3 {
+  color: #e5e7eb !important;
+} /* gray-200 */
+.dark .rich-text h4 {
+  color: #d1d5db !important;
+} /* gray-300 */
+.dark .rich-text h5 {
+  color: #cbd5e1 !important;
+} /* slate-300 */
+.dark .rich-text h6 {
+  color: #94a3b8 !important;
+} /* slate-400 */
+
+.dark .rich-text ol,
+.dark .rich-text ul,
+.dark .rich-text li {
+  color: #d1d5db !important;
+}
+
+.dark .rich-text strong {
+  color: #f3f4f6 !important;
+} /* gray-100 */
+.dark .rich-text a {
+  color: #93c5fd !important;
+} /* blue-300 */
+.dark .rich-text a:hover {
+  color: #60a5fa !important;
+} /* blue-400 */
+
+/* Default Quill toolbar styles */
+.ql-toolbar {
+  color: #000; /* Light mode */
+}
+
+/* Dark mode overrides */
+.dark .ql-toolbar {
+  color: #fff !important;
+}
+
+.dark .ql-toolbar .ql-picker-label,
+.dark .ql-toolbar .ql-picker-options,
+.dark .ql-toolbar button svg {
+  stroke: #fff !important; /* for icons */
+  color: #fff !important; /* for text */
+}
+
+.dark .ql-toolbar button:hover svg,
+.dark .ql-toolbar .ql-picker-label:hover {
+  color: #60a5fa !important; /* Tailwind blue-400 */
+  stroke: #60a5fa !important;
+}
+
+select,
+option {
+  @apply bg-white text-gray-900 dark:bg-gray-800 dark:text-white;
+}
+
+select option {
+  background-color: white;
+  color: black;
+}
+
+.dark select option {
+  background-color: #1f2937; /* Tailwind gray-800 */
+  color: white;
+}
+
+/* ========== Quill Toolbar Dark Mode Fix ========== */
+.dark .ql-toolbar {
+  background-color: #1f2937; /* gray-800 */
+  border-color: #374151; /* gray-700 */
+}
+
+.dark .ql-toolbar button,
+.dark .ql-toolbar .ql-picker-label,
+.dark .ql-toolbar .ql-picker-item {
+  color: #ffffff !important; /* make icons/text white */
+  fill: #ffffff !important; /* SVG icons */
+  stroke: #ffffff !important;
+}
+
+/* Ensure hover is visible */
+.dark .ql-toolbar button:hover,
+.dark .ql-toolbar .ql-picker-label:hover,
+.dark .ql-toolbar .ql-picker-item:hover {
+  color: #60a5fa !important; /* blue-400 on hover */
+  fill: #60a5fa !important;
+  stroke: #60a5fa !important;
+}
+
+/* Dropdown background + text */
+.dark .ql-picker-options {
+  background-color: #1f2937 !important; /* dark background */
+  color: #ffffff !important;
+  border-color: #374151 !important;
+}
+
+.dark .ql-picker-options .ql-picker-item {
+  color: #ffffff !important;
+}
+
+.dark .ql-picker-options .ql-picker-item:hover {
+  background-color: #374151 !important; /* gray-700 on hover */
+}
+
+/* ============================
+   Explicit toolbar buttons fix
+   ============================ */
+.dark .ql-toolbar .ql-bold svg,
+.dark .ql-toolbar .ql-italic svg,
+.dark .ql-toolbar .ql-underline svg,
+.dark .ql-toolbar .ql-list svg {
+  stroke: #ffffff !important;
+  fill: #ffffff !important;
+}
+
+.dark .ql-toolbar .ql-bold:hover svg,
+.dark .ql-toolbar .ql-italic:hover svg,
+.dark .ql-toolbar .ql-underline:hover svg,
+.dark .ql-toolbar .ql-list:hover svg {
+  stroke: #60a5fa !important;
+  fill: #60a5fa !important;
+}
+
+/* Toolbar background */
+.rdw-editor-toolbar {
+  background-color: #1f2937 !important; /* dark gray */
+  border: none !important;
+}
+
+/* Buttons (B I U Lists etc.) */
+.rdw-option-wrapper {
+  background-color: #374151 !important; /* darker button bg */
+  border: 1px solid #4b5563 !important;
+  color: #f9fafb !important; /* white text */
+}
+
+.rdw-option-wrapper:hover {
+  background-color: #4b5563 !important;
+  color: #ffffff !important;
+}
+
+/* Active state (when button is selected like Bold active) */
+.rdw-option-active {
+  background-color: #2563eb !important; /* blue active */
+  border-color: #2563eb !important;
+  color: #fff !important;
+}
+
+/* Dropdowns (font size, normal etc.) */
+.rdw-dropdown-wrapper {
+  background-color: #374151 !important;
+  border: 1px solid #4b5563 !important;
+  color: #f9fafb !important;
+}
+
+.rdw-dropdown-optionwrapper {
+  background-color: #374151 !important;
+  color: #f9fafb !important;
+}
+
+.rdw-dropdown-optionwrapper:hover {
+  background-color: #4b5563 !important;
+  color: #ffffff !important;
 }
