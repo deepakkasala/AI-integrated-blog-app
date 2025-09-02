@@ -8,7 +8,13 @@ const commentRoutes = require("./routes/comment");
 
 const app = express();
 
-app.use(cors());
+// app.use(cors());
+app.use(
+  cors({
+    origin: "*", // or list your frontend domain here
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  })
+);
 app.use(express.json());
 app.use("/uploads", express.static("public/uploads"));
 
