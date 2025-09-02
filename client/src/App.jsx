@@ -11,8 +11,10 @@ import Login from "./components/admin/Login";
 import "quill/dist/quill.snow.css";
 import { Toaster } from "react-hot-toast";
 import { useAppContext } from "./context/AppContext";
+import { BASE_URL } from "./utils/constants";
 const App = () => {
   const { token } = useAppContext();
+  console.log(BASE_URL);
   return (
     <div>
       <Toaster />
