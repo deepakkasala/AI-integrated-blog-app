@@ -58,10 +58,7 @@ const EditModal = ({ blog, Title, setEditModal }) => {
         formData.append("image", image);
       } else {
       }
-      const { data } = await axios.post(
-        "http://localhost:3020/blogs/editBlog",
-        formData
-      );
+      const { data } = await axios.post(`${BASE_URL}/blogs/editBlog`, formData);
 
       if (data.success) {
         toast.success(data.message);
